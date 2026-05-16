@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // Obligatorio para recargar la escena
 
 public class BallController : MonoBehaviour
 {
-    public float velocidad = 5f;
+    public float velocidadMovimiento = 5f;
     public float fuerzaRebote = 7f;
     private Rigidbody rb;
 
@@ -13,18 +14,23 @@ public class BallController : MonoBehaviour
 
     void Update()
     {
-        // Desplazamiento en X y Z (con flechas del teclado o WASD)
         float movX = Input.GetAxis("Horizontal");
         float movZ = Input.GetAxis("Vertical");
-
-        // Mantiene la velocidad actual en Y (para la gravedad/rebote)
-        rb.linearVelocity = new Vector3(movX * velocidad, rb.linearVelocity.y, movZ * velocidad);
+        rb.linearVelocity = new Vector3(movX * velocidadMovimiento, rb.linearVelocity.y, movZ * velocidadMovimiento);
     }
 
-    // Integración de colisiones
     private void OnCollisionEnter(Collision collision)
     {
-        // Al tocar un objeto con Collider (la plataforma), rebota en el eje Y
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaRebote, rb.linearVelocity.z);
+        // Bucle al perder: Si chocamos contra un obstáculo
+        if (collision.gameObject.CompareTag("Obstaculo"))
+        {
+            // Reinicia la escena actual
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            // Si es plataforma normal, rebota
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaRebote, rb.linearVelocity.z);
+        }
     }
 }
