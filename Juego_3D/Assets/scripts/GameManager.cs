@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         // Curva de dificultad: Cada vez que sumamos puntos, la velocidad de movimiento de la bola aumenta ligeramente
         if (ballController != null)
         {
-            ballController.velocidadMovimiento += 0.2f; 
+            ballController.velocidad += 0.2f; 
         }
     }
 }
